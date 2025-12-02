@@ -2,11 +2,11 @@
 library(tidyverse)
 
 ## limit before uploading to github to reduce size
-# a <- read_csv("Data/nihr-summary-view.csv")
-# a  <- a %>% 
-#   filter(Programme == "Health Technology Assessment", 
-#          str_detect(HRCS_RAC_Category, fixed("6. Evaluation of Treatments and Therapeutic Interventions")),
-#          str_detect(Involvement_Type, "Chief Investigator"))
+a <- read_csv("Data/nihr-summary-view.csv")
+ a  <- a %>% 
+  filter(Programme == "Health Technology Assessment",
+         str_detect(HRCS_RAC_Category, fixed("6. Evaluation of Treatments and Therapeutic Interventions")),
+         str_detect(Involvement_Type, "Chief Investigator"))
 write_csv(a, "Data/nihr-summary-view.csv.gz")
 
 a <- read_csv("Data/nihr-summary-view.csv.gz")
@@ -77,3 +77,19 @@ dev.off()
 tiff("plot_cost_hlth.tiff", res = 300, compression = "lzw", height = 6, width = 6, unit = "in")
 plt_cost_hlth
 dev.off()
+
+
+
+png("plot_n.png", res = 300, height = 6, width = 6, unit = "in")
+plt_n
+dev.off()
+png("plot_cost.png", res = 300, height = 6, width = 6, unit = "in")
+plt_cost
+dev.off()
+png("plot_n_hlth.png", res = 300, height = 6, width = 6, unit = "in")
+plt_n_hlth
+dev.off()
+png("plot_cost_hlth.png", res = 300, height = 6, width = 6, unit = "in")
+plt_cost_hlth
+dev.off()
+
