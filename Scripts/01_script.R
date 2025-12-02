@@ -51,7 +51,7 @@ a_lng_smry <- a_lng_smry %>%
   mutate(hlth_cat_lng = factor(hlth_cat_lng, levels = hlth_cat_lng))
 plt_n_hlth <- ggplot(a_lng_smry, aes(x = hlth_cat_lng, y = n)) +
   geom_point() +
-  scale_y_continuous("Number of trials started that year") +
+  scale_y_continuous("Number of trials") +
   coord_flip() +
   scale_x_discrete("Health category")
 plt_n_hlth
@@ -65,31 +65,59 @@ plt_cost_hlth <- ggplot(a_lng_smry, aes(x = hlth_cat_lng, y = cost/1000000)) +
   scale_y_continuous("Cost in millions (£)")
 plt_cost_hlth
 
-tiff("plot_n.tiff", res = 300, compression = "lzw", height = 6, width = 6, unit = "in")
+tiff("Outputs/plot_n.tiff", res = 300, compression = "lzw", height = 6, width = 6, unit = "in")
 plt_n
 dev.off()
-tiff("plot_cost.tiff", res = 300, compression = "lzw", height = 6, width = 6, unit = "in")
+tiff("Outputs/plot_cost.tiff", res = 300, compression = "lzw", height = 6, width = 6, unit = "in")
 plt_cost
 dev.off()
-tiff("plot_n_hlth.tiff", res = 300, compression = "lzw", height = 6, width = 6, unit = "in")
+tiff("Outputs/plot_n_hlth.tiff", res = 300, compression = "lzw", height = 6, width = 6, unit = "in")
 plt_n_hlth
 dev.off()
-tiff("plot_cost_hlth.tiff", res = 300, compression = "lzw", height = 6, width = 6, unit = "in")
+tiff("Outputs/plot_cost_hlth.tiff", res = 300, compression = "lzw", height = 6, width = 6, unit = "in")
 plt_cost_hlth
 dev.off()
 
 
 
-png("plot_n.png", res = 300, height = 6, width = 6, unit = "in")
+png("Outputs/plot_n.png", res = 300, height = 6, width = 6, unit = "in")
 plt_n
 dev.off()
-png("plot_cost.png", res = 300, height = 6, width = 6, unit = "in")
+png("Outputs/plot_cost.png", res = 300, height = 6, width = 6, unit = "in")
 plt_cost
 dev.off()
-png("plot_n_hlth.png", res = 300, height = 6, width = 6, unit = "in")
+png("Outputs/plot_n_hlth.png", res = 300, height = 6, width = 6, unit = "in")
 plt_n_hlth
 dev.off()
-png("plot_cost_hlth.png", res = 300, height = 6, width = 6, unit = "in")
+png("Outputs/plot_cost_hlth.png", res = 300, height = 6, width = 6, unit = "in")
 plt_cost_hlth
 dev.off()
 
+
+library(tidyverse)
+# library(RPostgreSQL)
+## Add AACT CTTI database password. Will create a popout window
+# mypassword <- rstudioapi::askForPassword()
+## Connect to database
+# drv <- dbDriver('PostgreSQL')
+# con <- dbConnect(drv, dbname="aact",host="aact-db.ctti-clinicaltrials.org",
+#                  port=5432, user="dmcalli",
+#                  password=mypassword)
+# dbListTables(con)
+# ids <- dbGetQuery(con, "SELECT * from ID_information")
+# dbDisconnect(con)
+# saveRDS(ids, "ids_ctg.Rds")
+
+ids <- readRDS("ids_ctg.Rds")
+ids <- as_tibble(ids)
+# 2 of 889 on CTG
+a %>% semi_join(ids %>% select(Project_ID = id_value))
+
+# install.packages("tidyllm")
+library(tidyllm)
+schema <- tidyllm_schema(
+  list(
+    myid = field_chr(""),
+    caveats = field_chr("comma-separated caveats")
+  )
+)
